@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2023 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,46 +23,20 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Database_Mysql extends Ai1wm_Database {
 
 	/**
 	 * Run MySQL query
 	 *
-	 * @param  string $input SQL query
-	 * @return mixed
+	 * @param  string   $input SQL query
+	 * @return resource
 	 */
 	public function query( $input ) {
-		if ( ! ( $result = mysql_query( $input, $this->wpdb->dbh ) ) ) {
-			$mysql_errno = 0;
-
-			// Get MySQL error code
-			if ( ! empty( $this->wpdb->dbh ) ) {
-				if ( is_resource( $this->wpdb->dbh ) ) {
-					$mysql_errno = mysql_errno( $this->wpdb->dbh );
-				} else {
-					$mysql_errno = 2006;
-				}
-			}
-
-			// MySQL server has gone away, try to reconnect
-			if ( empty( $this->wpdb->dbh ) || 2006 === $mysql_errno ) {
-				if ( ! $this->wpdb->check_connection( false ) ) {
-					throw new Ai1wm_Database_Exception( __( 'Error reconnecting to the database. <a href="https://help.servmask.com/knowledgebase/mysql-error-reconnecting/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), 503 );
-				}
-
-				$result = mysql_query( $input, $this->wpdb->dbh );
-			}
-		}
-
-		return $result;
+		return mysql_query( $input, $this->wpdb->dbh );
 	}
 
 	/**
-	 * Escape string input for MySQL query
+	 * Escape string input for mysql query
 	 *
 	 * @param  string $input String to escape
 	 * @return string
@@ -90,51 +64,51 @@ class Ai1wm_Database_Mysql extends Ai1wm_Database {
 	}
 
 	/**
-	 * Return server info
+	 * Return server version
 	 *
 	 * @return string
 	 */
-	public function server_info() {
+	public function version() {
 		return mysql_get_server_info( $this->wpdb->dbh );
 	}
 
 	/**
 	 * Return the result from MySQL query as associative array
 	 *
-	 * @param  mixed $result MySQL resource
+	 * @param  resource $result MySQL resource
 	 * @return array
 	 */
-	public function fetch_assoc( &$result ) {
+	public function fetch_assoc( $result ) {
 		return mysql_fetch_assoc( $result );
 	}
 
 	/**
 	 * Return the result from MySQL query as row
 	 *
-	 * @param  mixed $result MySQL resource
+	 * @param  resource $result MySQL resource
 	 * @return array
 	 */
-	public function fetch_row( &$result ) {
+	public function fetch_row( $result ) {
 		return mysql_fetch_row( $result );
 	}
 
 	/**
 	 * Return the number for rows from MySQL results
 	 *
-	 * @param  mixed $result MySQL resource
+	 * @param  resource $result MySQL resource
 	 * @return integer
 	 */
-	public function num_rows( &$result ) {
+	public function num_rows( $result ) {
 		return mysql_num_rows( $result );
 	}
 
 	/**
 	 * Free MySQL result memory
 	 *
-	 * @param  mixed $result MySQL resource
+	 * @param  resource $result MySQL resource
 	 * @return boolean
 	 */
-	public function free_result( &$result ) {
+	public function free_result( $result ) {
 		return mysql_free_result( $result );
 	}
 }

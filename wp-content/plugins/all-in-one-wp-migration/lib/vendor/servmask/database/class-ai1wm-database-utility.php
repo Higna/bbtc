@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2023 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,44 +23,7 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
-
 class Ai1wm_Database_Utility {
-
-	protected static $db_client = null;
-
-	public static function set_client( $db_client ) {
-		self::$db_client = $db_client;
-	}
-
-	/**
-	 * Get MySQLClient to be used for DB manipulation
-	 *
-	 * @return Ai1wm_Database
-	 */
-	public static function create_client() {
-		global $wpdb;
-
-		if ( self::$db_client ) {
-			return self::$db_client;
-		}
-
-		if ( $wpdb instanceof WP_SQLite_DB ) {
-			return new Ai1wm_Database_Sqlite( $wpdb );
-		}
-
-		if ( PHP_MAJOR_VERSION >= 7 ) {
-			return new Ai1wm_Database_Mysqli( $wpdb );
-		}
-
-		if ( empty( $wpdb->use_mysqli ) ) {
-			return new Ai1wm_Database_Mysql( $wpdb );
-		}
-
-		return new Ai1wm_Database_Mysqli( $wpdb );
-	}
 
 	/**
 	 * Replace all occurrences of the search string with the replacement string.
@@ -109,9 +72,7 @@ class Ai1wm_Database_Utility {
 					$tmp   = $data;
 					$props = get_object_vars( $data );
 					foreach ( $props as $key => $value ) {
-						if ( ! empty( $tmp->$key ) ) {
-							$tmp->$key = self::replace_serialized_values( $from, $to, $value, false );
-						}
+						$tmp->$key = self::replace_serialized_values( $from, $to, $value, false );
 					}
 
 					$data = $tmp;
@@ -184,15 +145,5 @@ class Ai1wm_Database_Utility {
 	 */
 	public static function base64_decode( $data ) {
 		return base64_decode( $data );
-	}
-
-	/**
-	 * Validate base64 data
-	 *
-	 * @param  string  $data Data to validate
-	 * @return boolean
-	 */
-	public static function base64_validate( $data ) {
-		return base64_encode( base64_decode( $data ) ) === $data;
 	}
 }

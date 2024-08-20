@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2023 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,6 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	die( 'Kangaroos cannot jump here' );
-}
 
 class Ai1wm_Export_Download {
 
@@ -53,52 +49,25 @@ class Ai1wm_Export_Download {
 			}
 
 			// Set archive details
-			$file = ai1wm_archive_name( $params );
 			$link = ai1wm_backup_url( $params );
 			$size = ai1wm_backup_size( $params );
 			$name = ai1wm_site_name( $blog_id );
 
 			// Set progress
-			if ( ai1wm_direct_download_supported() ) {
-				Ai1wm_Status::download(
-					sprintf(
-						__(
-							'<a href="%s" class="ai1wm-button-green ai1wm-emphasize ai1wm-button-download" title="%s" download="%s">' .
-							'<span>Download %s</span>' .
-							'<em>Size: %s</em>' .
-							'</a>',
-							AI1WM_PLUGIN_NAME
-						),
-						$link,
-						$name,
-						$file,
-						$name,
-						$size
-					)
-				);
-			} else {
-				Ai1wm_Status::download(
-					sprintf(
-						__(
-							'<a href="#" class="ai1wm-button-green ai1wm-emphasize ai1wm-direct-download" title="%s" download="%s">' .
-							'<span>Download %s</span>' .
-							'<em>Size: %s</em>' .
-							'</a>',
-							AI1WM_PLUGIN_NAME
-						),
-						$name,
-						$file,
-						$name,
-						$size
-					)
-				);
-			}
-		}
-
-		do_action( 'ai1wm_status_export_done', $params );
-
-		if ( isset( $params['ai1wm_manual_backup'] ) ) {
-			do_action( 'ai1wm_status_backup_created', $params );
+			Ai1wm_Status::download(
+				sprintf(
+					__(
+						'<a href="%s" class="ai1wm-button-green ai1wm-emphasize">' .
+						'<span>Download %s</span>' .
+						'<em>Size: %s</em>' .
+						'</a>',
+						AI1WM_PLUGIN_NAME
+					),
+					$link,
+					$name,
+					$size
+				)
+			);
 		}
 
 		return $params;
