@@ -14,3 +14,12 @@ RewriteRule . /bbtv/index.php [L]
 </IfModule>
 
 # END WordPress
+# BEGIN Simply Static
+# The directives (lines) between "BEGIN Simply Static" and "END Simply Static" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<Files "C:\xampp\htdocs\bbtv/wp-content/uploads\simply-static\b8bb1a2b01cdc4c0b5ff7d94201e5fe5-debug.txt">
+require all denied
+require host localhost
+</Files>
+# END Simply Static
